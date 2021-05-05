@@ -1,76 +1,106 @@
-import Header from '../reuseableComponent/Header'
-import InputField from '../reuseableComponent/InputField'
-import Password from '../reuseableComponent/Password'
-import SubmitButton from '../reuseableComponent/Button'
-import '../pages/style.css'
+import React from 'react'
+import '../pages/style.css';
+import Image from '../Images/stock_1.jpg';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import PersonIcon from '@material-ui/icons/Person';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
+import Button from '@material-ui/core/Button';
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+      width: '45ch',
+
+    },
+  },
+}));
 
 export default function SignIn() {
-  const schema=yup.object().shape({
-    Username:yup.string().required("This field is required"),
-    Password:yup.string().required("This field is required").min(8,"Password must be atleast 8 character"),
-  
+  const classes = useStyles();
+
+  const schema = yup.object().shape({
+    email: yup.string().required("This field is required"),
+    password: yup.string().required("This field is required").min(8, "Password must be atleast 8 character"),
+
   })
 
-const formik=useFormik(
-  {
-    initialValues:{
-      Username:"",
-      Password:""
-    },
-    validationSchema:schema,
-    onSubmit:(data)=>{
-      console.log(data)
+  const formik = useFormik(
+    {
+      initialValues: {
+        email: "",
+        password: ""
+      },
+      validationSchema: schema,
+      onSubmit: (data) => {
+        console.log(data)
+      }
     }
-  }
-)
-
-
-
-
+  )
 
   return (
-    console.log(formik),
-    <div className="App">
-      <div className="container">
-        <AccountCircleIcon className="logo"></AccountCircleIcon>
+    <div className="parent-div">
 
-        <Header name="Members Login"></Header>
+      <div className="outer-div">
 
-        <form onSubmit={formik.handleSubmit}>
 
-        <InputField lable="Username"
-        name="Username"
-        values={formik.values.username}
-        onChange={formik.handleChange}
-        handleChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        touched={formik.touched.Username}
-        error={formik.errors.Username}></InputField><br></br>
+        <div className="image">
+          <img src={Image} width='700px' height='600px' />
+        </div>
 
-        <Password Content="Password"
-        name="Password"
-        values={formik.values.Password}
-        onChange={formik.handleChange}
-        handleChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        touched={formik.touched.Password}
-        error={formik.errors.Password}></Password><br></br><br></br>
 
-        <SubmitButton buttonContaint="Sign in"></SubmitButton>
-        
-        <Link to='/Signup'><h5>Don't have account? SignUp</h5></Link>
-        </form>
-        
+        <div className="login-div">
+
+          <center><AccountCircleIcon className="logo" /></center>
+          <center><h1>Welcome Back</h1></center>
+
+          <center><form onSubmit={formik.handleSubmit} className={classes.root} noValidate autoComplete="off">
+            <TextField
+              id="email"
+              label="Email"
+              variant="outlined"
+              InputProps={{ endAdornment: <PersonIcon className="icon1" /> }}
+              name="email"
+              values={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={(formik.touched.email && formik.errors.email) ? true : false}
+              helperText={(formik.touched.email && formik.errors.email) ? formik.errors.email : ""}
+            /><br /><br />
+
+            <TextField
+              id="password"
+              label="Password"
+              type="password"
+              autoComplete="current-password"
+              variant="outlined"
+              InputProps={{ endAdornment: < VisibilityOffIcon className="icon2" /> }}
+              name="password"
+              values={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={(formik.touched.password && formik.errors.password) ? true : false}
+              helperText={(formik.touched.password && formik.errors.password) ? formik.errors.password : ""}
+            /><br /><br />
+
+
+            <Button variant="contained" color="primary" id="button" type="submit">
+              login now
+            </Button>
+
+            <Link to='/Signup' className="link"><Button variant="contained" color="primary" id="button2" type="submit">
+              create account
+            </Button></Link>
+
+          </form>
+          </center>
+        </div>
       </div>
-      
-
-
-
     </div>
-  );
+  )
 }
