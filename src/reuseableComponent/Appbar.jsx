@@ -9,6 +9,8 @@ import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button'
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { Link } from 'react-router-dom';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import '../pages/style.css'
 
 
 
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
-    width: '100%',
+    width: '80%',
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
@@ -114,19 +116,21 @@ export default function Appbar({history}) {
     <div className={classes.grow}>
       <AppBar 
       position="static"
-      style={{ backgroundColor: '#3d5afe' }}>
+      style={{ backgroundColor: '#8093f1',marginTop:'10px', boxShadow:'none'}}>
         <Toolbar>
 
-          <Typography className={classes.title} variant="h6" noWrap>
-            Brain Tumor Detection
+        <BarChartIcon id='barIcon'/>
+        <Typography className={classes.title} variant="h6" noWrap>
+         <h2 style={{color:'#2b2c28'}}><span style={{color:'white'}}>   Tranding</span>  Stock</h2>
+         
           </Typography>
           
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
 
-            <Link to='/' className="link"><Button color="inherit">Home</Button></Link>
-            <Link to='/services' className="link"><Button color="inherit">services</Button></Link>
-            <Link to='/aboutus' className="link"><Button color="inherit">About us</Button></Link>
+            <Link to='/' className="link"><Button color="black" style={{fontWeight:'bold',fontSize:'16px'}}>Home</Button></Link>
+            <Link to='/services' className="link"><Button color="black" style={{fontWeight:'bold',color:'black',fontSize:'16px'}}>services</Button></Link>
+            <Link to='/aboutus' className="link"><Button color="black" style={{fontWeight:'bold',fontSize:'16px'}}>About us</Button></Link>
 
           </div>
           <div className={classes.sectionMobile}>
