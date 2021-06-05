@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://127.0.0.1:8000'; //base url
+axios.defaults.headers.get['Accept'] = 'application/json'   // default header for all get request
+axios.defaults.headers.post['Accept'] = 'application/json'  // default header for all POST request
 
 ReactDOM.render(
   <React.StrictMode>

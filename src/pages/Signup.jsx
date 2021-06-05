@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import '../pages/style.css';
 import Image from '../Images/stock_1.jpg';
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,12 +6,16 @@ import TextField from '@material-ui/core/TextField';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import PersonIcon from '@material-ui/icons/Person';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
-import CallIcon from '@material-ui/icons/Call';
 import Button from '@material-ui/core/Button';
 import TrendingFlatIcon from '@material-ui/icons/TrendingFlat';
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useToasts } from 'react-toast-notifications';
+import Loader from '../reuseableComponent/Loader';
+import { useHistory } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,10 +29,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+  const {addToast} = useToasts();
+  const [isLoading, setisLoading] = useState(false)
+  const history = useHistory();
 
   const schema = yup.object().shape({
-    name: yup.string().required("This field is required"),
-    phone: yup.string().required("This field is required"),
+    username: yup.string().required("This field is required"),
     email: yup.string().required("This field is required"),
     password: yup.string().required("This field is required").min(8, "Password must be atleast 8 character"),
 
@@ -37,26 +43,66 @@ export default function SignIn() {
   const formik = useFormik(
     {
       initialValues: {
-        name:"",
-        phone:"",
+        username:"",
         email: "",
         password: ""
       },
       validationSchema: schema,
       onSubmit: (data) => {
-        console.log(data)
+        setisLoading(true);
+        axios.post("/auth/adduser/",data).then(
+          (res)=>{
+            console.log(res);
+            if (res.data.status){
+              addToast("successfully registered user", { appearance: 'success',autoDismiss : true });
+              setisLoading(false);
+              history.push("/signin")
+            }
+            else{
+              setisLoading(false);
+                if (res.data.message.username && res.data.message.email)
+                {
+                  
+                  let message =  res.data.message.username + " " + res.data.message.email
+                  addToast(message, { appearance: 'success',autoDismiss : true }); 
+                } 
+                else if (res.data.message.username){
+                  let message =  res.data.message.username 
+                  addToast(message, { appearance: 'success',autoDismiss : true }); 
+                }
+                else if (res.data.message.email)
+                {
+                  let message =  res.data.message.email 
+                  addToast(message, { appearance: 'success',autoDismiss : true }); 
+                }
+                else{
+                  addToast(res.data.message, { appearance: 'success',autoDismiss : true });
+                } 
+               // addToast(, { appearance: 'success',autoDismiss : true });
+              
+            }
+           
+          }
+        ).catch((err)=>{
+          console.log(err);
+          addToast("something went wrong", { appearance: 'error',autoDismiss : true });
+          setisLoading(false);
+        })
       }
     }
   )
 
   return (
+    isLoading ? 
+    <div className="loader">
+    <Loader/> 
+    </div> : 
     <div className="parent-div">
-
       <div className="outer-div">
 
 
         <div className="image">
-          <img src={Image} width='700px' height='600px' />
+          <img src={Image} width='700px' height='600px' alt="not found"/>
         </div>
 
 
@@ -71,7 +117,7 @@ export default function SignIn() {
               label="UserName"
               variant="outlined"
               InputProps={{ endAdornment: <PersonIcon className="icon1" /> }}
-              name="name"
+              name="username"
               values={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -79,18 +125,7 @@ export default function SignIn() {
               helperText={(formik.touched.email && formik.errors.name) ? formik.errors.name: ""}
             /><br /><br />
 
-            <TextField
-              id="phone"
-              label="Phone Number"
-              variant="outlined"
-              InputProps={{ endAdornment: < CallIcon className="icon1" /> }}
-              name="phone"
-              values={formik.values.phone}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={(formik.touched.email && formik.errors.phone) ? true : false}
-              helperText={(formik.touched.email && formik.errors.phone) ? formik.errors.phone: ""}
-            /><br /><br />
+            
 
             <TextField
               id="email"

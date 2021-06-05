@@ -63,9 +63,6 @@ export default function Appbar({history}) {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -128,7 +125,7 @@ export default function Appbar({history}) {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
 
-            <Link to='/' className="link"><Button color="black" style={{fontWeight:'bold',fontSize:'16px'}}>Home</Button></Link>
+            <Link to='/home' className="link"><Button color="black" style={{fontWeight:'bold',fontSize:'16px'}}>Home</Button></Link>
             <Link to='/services' className="link"><Button color="black" style={{fontWeight:'bold',color:'black',fontSize:'16px'}}>services</Button></Link>
             <Link to='/aboutus' className="link"><Button color="black" style={{fontWeight:'bold',fontSize:'16px'}}>About us</Button></Link>
 

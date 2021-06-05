@@ -24,7 +24,7 @@ export default function AboutPage() {
                     </div>
                 </div>
                 <div className="image">
-                    <img src={Image} width='800px' height='700px' />
+                    <img src={Image} width='800px' height='700px' alt="not found" />
                 </div>
             </div>
 

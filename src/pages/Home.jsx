@@ -9,7 +9,7 @@ export default function Home() {
             <Appbar />
             <div className='home-outer-div'>
                 <div className="image">
-                    <img src={Image} width='800px' height='700px'/>
+                    <img src={Image} width='800px' height='700px' alt="not found"/>
                 </div>
                 <div className='text-div'>
                     <h1><span style={{ color: "#001d3d", fontFamily: 'dancing-script', marginRight: '110px', fontSize: 70, fontWeight: 'bold' }}> Welcome to</span> </h1>

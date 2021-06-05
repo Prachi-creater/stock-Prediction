@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import '../pages/style.css';
 import Image from '../Images/stock_1.jpg';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,6 +10,10 @@ import Button from '@material-ui/core/Button';
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useToasts } from 'react-toast-notifications';
+import Loader from '../reuseableComponent/Loader'
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+  const {addToast} = useToasts();
+  const [isLoading, setisLoading] = useState(false)
+  const history = useHistory();
 
   const schema = yup.object().shape({
     email: yup.string().required("This field is required"),
@@ -39,18 +46,35 @@ export default function SignIn() {
       validationSchema: schema,
       onSubmit: (data) => {
         console.log(data)
+        setisLoading(true);
+        axios.post("/auth/login/",data).then(
+          (res)=>{
+            console.log(res);
+            addToast("successfully logged in ", { appearance: 'success',autoDismiss : true });
+            setisLoading(false);
+            history.push("/home")
+          }
+        ).catch((err)=>{
+          console.log(err);
+          addToast("Invalid username or password", { appearance: 'error',autoDismiss : true });
+          setisLoading(false);
+        })
       }
     }
   )
 
   return (
+    isLoading ? 
+    <div className="loader">
+      <Loader/> 
+      </div>:
     <div className="parent-div">
 
       <div className="outer-div">
 
 
         <div className="image">
-          <img src={Image} width='700px' height='600px' />
+          <img src={Image} width='700px' height='600px' alt="not found" />
         </div>
 
 
