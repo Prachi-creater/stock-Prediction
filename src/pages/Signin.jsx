@@ -28,12 +28,11 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
   const {addToast} = useToasts();
-  const [isLoading, setisLoading] = useState(false)
   const history = useHistory();
 
   const schema = yup.object().shape({
-    email: yup.string().required("This field is required"),
-    password: yup.string().required("This field is required").min(8, "Password must be atleast 8 character"),
+    email: yup.string().required("This field is required").email("enter a valid email address"),
+    password: yup.string().required("This field is required")
 
   })
 
@@ -46,28 +45,34 @@ export default function SignIn() {
       validationSchema: schema,
       onSubmit: (data) => {
         console.log(data)
-        setisLoading(true);
-        axios.post("/auth/login/",data).then(
+        axios.post("/login",data).then(
           (res)=>{
             console.log(res);
-            addToast("successfully logged in ", { appearance: 'success',autoDismiss : true });
-            setisLoading(false);
-            history.push("/home")
+            
+          
+            if(res.data.result.status===1)
+            {
+              addToast("successfully logged in ", { appearance: 'success',autoDismiss : true });
+              history.push("/home")
+            }
+            else
+            {
+              addToast(res.data.result.message, { appearance: 'error',autoDismiss : true }); 
+              history.push("/signin")
+            }
+           
+            
           }
         ).catch((err)=>{
           console.log(err);
           addToast("Invalid username or password", { appearance: 'error',autoDismiss : true });
-          setisLoading(false);
+        
         })
       }
     }
   )
 
   return (
-    isLoading ? 
-    <div className="loader">
-      <Loader/> 
-      </div>:
     <div className="parent-div">
 
       <div className="outer-div">

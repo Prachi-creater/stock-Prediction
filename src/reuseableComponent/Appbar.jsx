@@ -113,21 +113,22 @@ export default function Appbar({history}) {
     <div className={classes.grow}>
       <AppBar 
       position="static"
-      style={{ backgroundColor: '#8093f1',marginTop:'10px', boxShadow:'none'}}>
+      style={{ backgroundColor: '#3a0ca3',marginTop:'5px', boxShadow:'none'}}>
         <Toolbar>
 
         <BarChartIcon id='barIcon'/>
-        <Typography className={classes.title} variant="h6" noWrap>
-         <h2 style={{color:'#2b2c28'}}><span style={{color:'white'}}>   Tranding</span>  Stock</h2>
+        <Typography className={classes.title} variant="h9" noWrap>
+         <h2 style={{color:'white'}}><span style={{color:'white'}}>Tranding</span>  Stock</h2>
          
           </Typography>
           
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
 
-            <Link to='/home' className="link"><Button color="black" style={{fontWeight:'bold',fontSize:'16px'}}>Home</Button></Link>
-            <Link to='/services' className="link"><Button color="black" style={{fontWeight:'bold',color:'black',fontSize:'16px'}}>services</Button></Link>
-            <Link to='/aboutus' className="link"><Button color="black" style={{fontWeight:'bold',fontSize:'16px'}}>About us</Button></Link>
+            <Link to='/home' className="link"><Button color="black" style={{fontWeight:'bold',fontSize:'16px',color:'white'}}>Home</Button></Link>
+            <Link to='/services' className="link"><Button color="black" style={{fontWeight:'bold',color:'black',fontSize:'16px',color:'white'}}>services</Button></Link>
+            <Link to='/aboutus' className="link"><Button color="black" style={{fontWeight:'bold',fontSize:'16px',color:'white'}}>About us</Button></Link>
+            <Link to='/signin' className="link"><Button color="black" style={{fontWeight:'bold',fontSize:'16px',color:'white'}}>Logout</Button></Link>
 
           </div>
           <div className={classes.sectionMobile}>

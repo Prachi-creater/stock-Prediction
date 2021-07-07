@@ -12,6 +12,7 @@ import axios from 'axios';
 import { useToasts } from 'react-toast-notifications';
 import Loader from '../reuseableComponent/Loader'
 import { useHistory } from "react-router-dom";
+import PredictionComponent from '../reuseableComponent/predictionComponent';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Services() {
-  var result ;
   const classes = useStyles();
   const [isDropdownDisabled, setisDropdownDisabled] = useState(false)
   const [selectedStock, setselectedStock] = useState("")
@@ -36,6 +36,31 @@ export default function Services() {
   const [isLoading, setisLoading] = useState(false)
   const history = useHistory();
   const [data, setdata] = useState(null);
+  
+  let initialData = {
+   quote: "SAIL",
+   vol:20000,
+   adj_close: 200,
+   close_s:300,
+   high_s:10,
+   low_s:45,
+   open_s:2,
+   lstm_pred:133,
+   lr_pred:222,
+   decision:"SELL",
+   arima_pred:200,
+   lr_graph: "http://127.0.0.1:5000/static/LSTM.png",
+   lstm_graph:"http://127.0.0.1:5000/static/LR.png",
+   twitter_graph:"http://127.0.0.1:5000/static/SA.png", 
+   arima_graph:"http://127.0.0.1:5000/static/ARIMA.png",
+   tw_pol :"positive",
+   tw_list : ["asjfnerjg","sfkenjgrk","asjferkgvksneg","afnkejrknwe",
+   "afnekrferggk"
+  ],
+  forecast_set:[[2],[3]]
+  }
+
+  const [result, setresult] = useState(null)
 
 
 
@@ -48,9 +73,9 @@ const handleChange=(event)=>{
  setisDropdownDisabled(true)
  console.log(event.target.value)
 
- axios.post("/api/stockprice/",payload).then(
+ axios.post("/predictions",payload).then(
   (res)=>{
-    setdata(res.data)
+    setresult(res.data.data)
     addToast("successfully fetched data", { appearance: 'success',autoDismiss : true });
     setisLoading(false);
     setshowgraph(true);
@@ -66,53 +91,56 @@ const handleChange=(event)=>{
 
  
 
-  const stock_names= ['AAPL','SAIL.NS'];
+  const stock_names= ['AAPL','SAIL.NS','AMZN','GOOG'];
  
 
   return (
+    <>
     <div>
       <Appbar></Appbar>
-
-      <center>
+      <div className="outer-container">
         <div className='container'>
-          <FormControl
-            variant="outlined"
-            className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">select stock names</InputLabel>
+          <h1 style={{color:'#ffba08'}}>Select Stock Name</h1>     
             <Select
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={stock_names}
               disabled={isDropdownDisabled}
               onChange={handleChange}
-              label="select stock name"
               name = "stock_name"
-              style={{ width: 300, backgroundColor: 'white' }}
+              style={{ width: 400, height:70,backgroundColor: 'white' }}
             >
               {
                 stock_names.length > 0 ? stock_names.map((ele, index) => <MenuItem value={ele} key={index}>{ele}</MenuItem>) : <MenuItem value=""><em>None</em></MenuItem>
 
               }
 
-
             </Select>
-          </FormControl>
-
-
         </div>
         <br></br><br></br>
-        <div className="chart-loader-container">
+        
+        </div>
+    </div>
+    <br></br><br></br>
+    <div className="chart-loader-container" style={{display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
           {
-            isLoading ? <><Loader/><h5>please wait while we are training our model</h5></> : ""
-          }
-          { 
-            showgraph && <><h1>Selected Stock Name : {selectedStock}</h1><ChartDisplay data={result} /> </>  
-            
+            isLoading ? <><Loader/><h4 style={{fontWeight: 'bold',color:'03045e'}}>please wait while we are training our model and getting predictions for you</h4></> : ""
           }
         </div>
-      </center>
-
-    </div>
+    <br></br>
+    <p></p>
+    <p></p>
+     
+     {
+       
+      showgraph ? 
+       <PredictionComponent
+           data={result}
+           date={new Date()}
+     /> 
+     : ""
+    }
+    </>
 
   )
 }

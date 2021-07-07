@@ -50,34 +50,17 @@ export default function SignIn() {
       validationSchema: schema,
       onSubmit: (data) => {
         setisLoading(true);
-        axios.post("/auth/adduser/",data).then(
+        axios.post("/register",data).then(
           (res)=>{
             console.log(res);
-            if (res.data.status){
-              addToast("successfully registered user", { appearance: 'success',autoDismiss : true });
+            if (res.data.result['status']===1){
+              addToast("successfully registered user, login now.", { appearance: 'success',autoDismiss : true });
               setisLoading(false);
               history.push("/signin")
             }
             else{
               setisLoading(false);
-                if (res.data.message.username && res.data.message.email)
-                {
-                  
-                  let message =  res.data.message.username + " " + res.data.message.email
-                  addToast(message, { appearance: 'success',autoDismiss : true }); 
-                } 
-                else if (res.data.message.username){
-                  let message =  res.data.message.username 
-                  addToast(message, { appearance: 'success',autoDismiss : true }); 
-                }
-                else if (res.data.message.email)
-                {
-                  let message =  res.data.message.email 
-                  addToast(message, { appearance: 'success',autoDismiss : true }); 
-                }
-                else{
-                  addToast(res.data.message, { appearance: 'success',autoDismiss : true });
-                } 
+              addToast("failed to  registered user.", { appearance: 'error',autoDismiss : true }); 
                // addToast(, { appearance: 'success',autoDismiss : true });
               
             }
